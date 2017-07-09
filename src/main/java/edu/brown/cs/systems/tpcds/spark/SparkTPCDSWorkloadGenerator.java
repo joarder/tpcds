@@ -5,8 +5,7 @@ import java.io.FileNotFoundException;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
-import org.apache.spark.sql.Row;
-import org.apache.spark.sql.SQLContext;
+import org.apache.spark.sql.*;
 import org.apache.spark.sql.hive.HiveContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +30,7 @@ public class SparkTPCDSWorkloadGenerator {
 		this.name = name;
 		this.settings = settings;
 		this.sparkConf = new SparkConf().setAppName(name);
-		this.sparkContext = new SparkContext(sparkConf);
+        this.sparkContext = new SparkContext(sparkConf);
 		this.sqlContext = new HiveContext(sparkContext);
 		
 		// Load the tables into memory using the spark-sql-perf Tables code
@@ -49,8 +48,8 @@ public class SparkTPCDSWorkloadGenerator {
 		return new SparkTPCDSWorkloadGenerator(name, settings);
 	}
 	
-	
 	public static void main(String[] args) throws FileNotFoundException {
+
 		if (args.length != 1) {
 			System.out.println("Expected argument specifying dataset and query, eg impala-tpcds-modified-queries/q19.sql");
 			return;
@@ -95,12 +94,13 @@ public class SparkTPCDSWorkloadGenerator {
 	        long postLoad = System.currentTimeMillis();
     
     		// Run the query
-    		Row[] rows = gen.sqlContext.sql(q.queryText).collect();
+    		//Dataset<Row> rows = this.sparkSession.sql(q.queryText).collect();
     		
     		// Print the output rows
-    		for (Row r : rows) {
-    			System.out.println(r);
-    		}
+    		//for (Row r : rows) {
+    			//System.out.println(r);
+    		//}
+            //rows.show();
     
     		long postQ = System.currentTimeMillis();
     		System.out.printf("Load time: %d, Query time: %d\n", postLoad-preLoad, postQ-postLoad);
